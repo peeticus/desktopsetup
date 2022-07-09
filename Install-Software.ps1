@@ -18,6 +18,7 @@ choco install googlechrome
 choco install firefox --params "/NoDesktopShortcut"
 choco install dotnet-5.0-sdk
 choco install visualstudio2019community --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
+choco install visualstudio2022community  --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive --locale en-US"
 choco install vscode --params "/NoDesktopIcon"
 choco install notepadplusplus
 choco install sql-server-management-studio
@@ -47,5 +48,15 @@ choco install azure-cli
 choco install poshgit
 choco install vscode-icons
 choco install filezilla
+choco install kubernetes-helm
+choco install microsoft-windows-terminal --pre
+Set-Alias -Name k -Value kubectl -Force
+Invoke-WebRequest -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | Invoke-Expression #Dapr
+dapr init
+choco install minikube
+minikube start
+dapr init -k
+
+
 #WinEth for ethereum mining #not available 7-2021
 #fractalmapper #not available 7-2021
