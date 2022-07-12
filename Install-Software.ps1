@@ -3,6 +3,20 @@ function Assert-AdminRights {
     return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
+function Add-Alias
+    ([string]$Name, [string]$Value)
+ {
+    $profileFilePath = Join-Path -Path $PsHome -ChildPath profile.ps1
+    $profileFileExists = Test-Path -Path $profileFilePath -PathType Leaf
+    if (!($profileFileExits) -or !(Select-String -Path $profileFilePath -Pattern "kubectl" -ErrorAction Ignore))
+    {
+        $profileFileContents = Get-Content -Path $profileFilePath -ErrorAction Ignore
+        $profileFileContents += "`r`nSet-Alias -Name $Name -Value $Value -Force"
+        Set-Content -Path $profileFilePath -Value $profileFileContents
+    }
+    Set-Alias -Name k -Value kubectl -Force
+}
+
 if (!(Assert-AdminRights)) {
     Write-Error "Admin rights are necessary to run this script. Please open a shell as a local administrator and run this script within."
     exit 1
@@ -50,7 +64,8 @@ choco install vscode-icons
 choco install filezilla
 choco install kubernetes-helm
 choco install microsoft-windows-terminal --pre
-Set-Alias -Name k -Value kubectl -Force
+Add-Alias -Name "k" -Value "kubectl" 
+
 Invoke-WebRequest -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | Invoke-Expression #Dapr
 dapr init
 choco install minikube
